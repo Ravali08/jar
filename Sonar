@@ -9,8 +9,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "mvn clean package"
-                    sh "docker buildx build -t 767663789401.dkr.ecr.ap-south-1.amazonaws.com/private:Jenkins.1.0.${BUILD_NUMBER} ."
+                     sh "sudo docker buildx build -t ravali218/test:1.0.${BUILD_NUMBER} ."
                 }
             }
         }
@@ -26,8 +25,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                   sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 767663789401.dkr.ecr.ap-south-1.amazonaws.com"
-                   sh "docker push 767663789401.dkr.ecr.ap-south-1.amazonaws.com/private:Jenkins.1.0.${BUILD_NUMBER}"
+                   sh "sudo docker push ravali218/test:1.0.${BUILD_NUMBER}"
                  }
             }
         }
@@ -36,7 +34,7 @@ pipeline {
             steps {
                 script {
                    sh "docker rm -f my-app || true"
-                    sh "docker run -itd --name my-app -p 8000:8080 767663789401.dkr.ecr.ap-south-1.amazonaws.com/private:Jenkins.1.0.${BUILD_NUMBER}"
+                   sh "sudo docker run -itd --name my-app -p 9000:8080 ravali218/test:1.0.${BUILD_NUMBER}"
                 }
             }
         }
